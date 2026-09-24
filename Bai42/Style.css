@@ -15,7 +15,7 @@ BLOCKQUOTE {
     background-color: silver;
 }
 UL {
-    list-style: circle url(hinh/Apple.jpg) outside;
+    list-style: circle url(Hinh/Apple.jpg) outside;
 }
 UL B {
     color: rgb(155,0,0);
