@@ -3,10 +3,15 @@
         <title>Travel Expense Report</title>
         <style>
             body {
-                background-color: #ccffff;
+                background-image: url("hinh/nentim.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+
                 font-family: "Comic Sans MS", cursive;
                 font-size: 18px;
-            }
+                }
 
             form {
                 width: 1000px;
@@ -37,13 +42,11 @@
 
             .expense-table {
                 width: 830px;
-                border-collapse: collapse;
                 text-align: center;
             }
 
             .expense-table th,
             .expense-table td {
-                border: 2px solid #669999;
                 padding: 4px;
             }
 
@@ -101,7 +104,7 @@
             </p>
 
             <p>5) Itemize your travel expenses</p>
-            <table class="expense-table">
+            <table border="1" class="expense-table">
                 <tr>
                     <th>Date</th>
                     <th>Description</th>
