@@ -1,0 +1,205 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Dynamic Table</title>
+
+        <style>
+            body {
+                font-family: "Times New Roman";
+                font-size: 20px;
+            }
+
+            #container {
+                width: 800px;
+                margin: auto;
+                border: 1px solid black;
+                padding: 10px;
+            }
+
+            #tbDuLieu {
+                width: 700px;
+                border-collapse: collapse;
+            }
+
+            #tbDuLieu td {
+                border: 1px solid gray;
+                padding: 5px;
+            }
+        </style>
+
+        <script>
+            //Lưu chế độ đường kẻ của bảng
+            var cheDo = "all";
+
+            function hienThiGio() {
+                var hienTai = new Date();
+
+                var gio = hienTai.getHours();
+                var phut = hienTai.getMinutes();
+                var giay = hienTai.getSeconds();
+
+                if (gio < 10) {
+                    gio = "0" + gio;
+                }
+
+                if (phut < 10) {
+                    phut = "0" + phut;
+                }
+
+                if (giay < 10) {
+                    giay = "0" + giay;
+                }
+
+                document.getElementById("dongHo").innerText =
+                    gio + ":" + phut + ":" + giay;
+            }
+
+            function khoiDong() {
+                hienThiGio();
+                setInterval(hienThiGio, 1000);
+                for (var i = 0; i < 3; i++) {
+                themDong();
+                }
+            }
+
+            function chuotTrai() {
+                alert("Bạn vừa nhấn chuột trái!");
+            }
+
+            function chuotPhai() {
+                alert("Bạn vừa nhấn chuột phải!");
+                return false;
+            }
+
+            function chonDong(tr) {
+                if (tr.style.backgroundColor == "red") {
+                    tr.style.backgroundColor = "white";
+                } else {
+                    tr.style.backgroundColor = "red";
+                }
+            }
+
+            function themDong() {
+                var tbody = document.getElementById("tbNoiDung");
+                var tr = document.createElement("tr");
+
+                var td1 = document.createElement("td");
+                td1.innerHTML = "Thêm dòng mới ở đây";
+                tr.appendChild(td1);
+
+                var td2 = document.createElement("td");
+                td2.innerHTML = "Thêm dòng mới ở đây";
+                tr.appendChild(td2);
+
+                tr.onclick = function() {
+                    chonDong(this);
+                };
+
+                //Chèn dòng mới lên đầu bảng
+                tbody.insertBefore(tr, tbody.firstChild);
+
+                //Áp dụng chế độ đường kẻ đang chọn
+                capNhatDuongKe();
+            }
+
+            function xoaDong() {
+                var tbody = document.getElementById("tbNoiDung");
+
+                //Duyệt từ cuối lên để không bỏ sót dòng khi xóa
+                for (var i = tbody.rows.length - 1; i >= 0; i--) {
+                    var tr = tbody.rows[i];
+
+                    if (tr.style.backgroundColor == "red") {
+                        tbody.removeChild(tr);
+                    }
+                }
+            }
+
+            function capNhatDuongKe() {
+                var tbody = document.getElementById("tbNoiDung");
+
+                for (var i = 0; i < tbody.rows.length; i++) {
+                    var tr = tbody.rows[i];
+
+                    for (var j = 0; j < tr.cells.length; j++) {
+                        var td = tr.cells[j];
+
+                        if (cheDo == "rows") {
+                            td.style.border = "none";
+                            td.style.borderTop = "1px solid gray";
+                            td.style.borderBottom = "1px solid gray";
+                        } else if (cheDo == "cols") {
+                            td.style.border = "none";
+                            td.style.borderLeft = "1px solid gray";
+                            td.style.borderRight = "1px solid gray";
+                        } else {
+                            td.style.border = "1px solid gray";
+                        }
+                    }
+                }
+            }
+
+            function chiHienDong() {
+                cheDo = "rows";
+                capNhatDuongKe();
+            }
+
+            function chiHienCot() {
+                cheDo = "cols";
+                capNhatDuongKe();
+            }
+
+            function moTrangMoi() {
+                window.open("https://tranduythanh.com", "_blank");
+            }
+        </script>
+    </head>
+
+    <body onload="khoiDong()">
+        <div id="container">
+            <div id="dongHo"></div>
+
+            <p onclick="chuotTrai()"
+               oncontextmenu="return chuotPhai()">
+                Click chuột vào dòng này. Sẽ xuất hiện thông báo
+                phím bấm của chuột
+            </p>
+
+            <table id="tbDuLieu">
+                <tbody id="tbNoiDung">
+                    <tr onclick="chonDong(this)">
+                        <td>Dòng 1 cột 1</td>
+                        <td>Dòng 1 cột 2</td>
+                    </tr>
+
+                    <tr onclick="chonDong(this)">
+                        <td>Dòng 2 cột 1</td>
+                        <td>Dòng 2 cột 2</td>
+                    </tr>
+
+                    <tr onclick="chonDong(this)">
+                        <td>Dòng 3 cột 1</td>
+                        <td>Dòng 3 cột 2</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br><br>
+
+            <input type="button" value="Thêm vào"
+                   onclick="themDong()">
+
+            <input type="button" value="Xóa"
+                   onclick="xoaDong()">
+
+            <input type="button" value="Chỉ hiện dòng"
+                   onclick="chiHienDong()">
+
+            <input type="button" value="Chỉ hiện cột"
+                   onclick="chiHienCot()">
+
+            <input type="button" value="Mở một trang mới"
+                   onclick="moTrangMoi()">
+        </div>
+    </body>
+</html>
