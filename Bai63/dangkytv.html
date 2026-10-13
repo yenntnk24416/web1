@@ -1,0 +1,338 @@
+<html>
+    <head>
+        <title>
+            Đăng ký thành viên
+        </title>
+
+        <style>
+            body {
+                font-family: "Times New Roman";
+                font-size: 18px;
+            }
+
+            th {
+                background-color: blue;
+                color: white;
+                text-align: left;
+            }
+        </style>
+
+        <script>
+            function loadDays() {
+                var ngay = document.getElementById("cboNgay");
+
+                for (var i = 1; i <= 31; i++) {
+                    var option = document.createElement("option");
+                    option.value = i;
+
+                    if (i < 10) {
+                        option.innerHTML = "0" + i;
+                    } else {
+                        option.innerHTML = i;
+                    }
+
+                    ngay.appendChild(option);
+                }
+            }
+
+            function loadMonths() {
+                var thang = document.getElementById("cboThang");
+                var i = 1;
+
+                while (i <= 12) {
+                    var option = document.createElement("option");
+                    option.value = i;
+                    option.innerHTML = i;
+                    thang.appendChild(option);
+                    i++;
+                }
+            }
+
+            function loadYears() {
+                var nam = document.getElementById("cboNam");
+                var namHienTai = new Date().getFullYear();
+                var i = 1970;
+
+                do {
+                    var option = document.createElement("option");
+                    option.value = i;
+                    option.innerHTML = i;
+                    nam.appendChild(option);
+                    i++;
+                } while (i <= namHienTai);
+            }
+
+            function loadData() {
+                loadDays();
+                loadMonths();
+                loadYears();
+            }
+
+            function kiemTra(ten, email) {
+                if (ten.trim() == "") {
+                    alert("Tên không được bỏ trống!");
+                    document.getElementById("txtTen").focus();
+                    return false;
+                }
+
+                var mauEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (mauEmail.test(email) == false) {
+                    alert("Email không hợp lệ!");
+                    document.getElementById("txtEmail").focus();
+                    return false;
+                }
+
+                return true;
+            }
+
+            function mouseOver(tr) {
+                tr.style.backgroundColor = "yellow";
+            }
+
+            function mouseOut(tr) {
+                tr.style.backgroundColor = "white";
+            }
+
+            function dangKy() {
+                var ten = document.getElementById("txtTen").value;
+                var email = document.getElementById("txtEmail").value;
+
+                if (kiemTra(ten, email) == false) {
+                    return;
+                }
+
+                var ngay = document.getElementById("cboNgay").value;
+                var thang = document.getElementById("cboThang").value;
+                var nam = document.getElementById("cboNam").value;
+
+                if (ngay < 10) {
+                    ngay = "0" + ngay;
+                }
+
+                if (thang < 10) {
+                    thang = "0" + thang;
+                }
+
+                var gioiTinh = "Nam";
+
+                if (document.getElementById("radNu").checked) {
+                    gioiTinh = "Nữ";
+                }
+
+                var soThich = "";
+                var dsSoThich = document.getElementsByName("soThich");
+
+                for (var i = 0; i < dsSoThich.length; i++) {
+                    if (dsSoThich[i].checked) {
+                        if (soThich != "") {
+                            soThich += ", ";
+                        }
+
+                        soThich += dsSoThich[i].value;
+                    }
+                }
+
+                var mauYeuThich = "";
+                var dsMau = document.getElementsByName("mau");
+
+                for (var i = 0; i < dsMau.length; i++) {
+                    if (dsMau[i].checked) {
+                        mauYeuThich = dsMau[i].value;
+                    }
+                }
+
+                var thanhVien = {
+                    ten: ten,
+                    email: email,
+                    gioiTinh: gioiTinh,
+                    ngaySinh: ngay + "/" + thang + "/" + nam,
+                    soThich: soThich,
+                    mauYeuThich: mauYeuThich
+                };
+
+                var tbody = document.getElementById("tbThanhVien");
+                var tr = document.createElement("tr");
+
+                var tdTen = document.createElement("td");
+                tdTen.innerText = thanhVien.ten;
+                tr.appendChild(tdTen);
+
+                var tdEmail = document.createElement("td");
+                tdEmail.innerText = thanhVien.email;
+                tr.appendChild(tdEmail);
+
+                var tdGioiTinh = document.createElement("td");
+                tdGioiTinh.innerText = thanhVien.gioiTinh;
+                tr.appendChild(tdGioiTinh);
+
+                var tdNgaySinh = document.createElement("td");
+                tdNgaySinh.innerText = thanhVien.ngaySinh;
+                tr.appendChild(tdNgaySinh);
+
+                var tdSoThich = document.createElement("td");
+                tdSoThich.innerText = thanhVien.soThich;
+                tr.appendChild(tdSoThich);
+
+                var tdMau = document.createElement("td");
+                tdMau.innerText = thanhVien.mauYeuThich;
+                tr.appendChild(tdMau);
+
+                tr.onmouseover = function() {
+                    mouseOver(this);
+                };
+
+                tr.onmouseout = function() {
+                    mouseOut(this);
+                };
+
+                tbody.appendChild(tr);
+            }
+
+            function tiep() {
+                document.getElementById("frmThanhVien").reset();
+                document.getElementById("txtTen").focus();
+            }
+        </script>
+    </head>
+
+    <body onload="loadData()">
+        <h1>Đăng ký thành viên</h1>
+        <hr>
+
+        <form id="frmThanhVien" name="frmThanhVien">
+            <table>
+                <tr>
+                    <td>Tên(*)</td>
+                    <td>
+                        <input type="text" id="txtTen">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Ngày sinh(*)</td>
+                    <td>
+                        Ngày:
+                        <select id="cboNgay"></select>
+
+                        Tháng:
+                        <select id="cboThang"></select>
+
+                        Năm:
+                        <select id="cboNam"></select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Giới tính(*)</td>
+                    <td>
+                        <input type="radio" id="radNam"
+                               name="gioiTinh" value="Nam" checked>Nam
+
+                        <input type="radio" id="radNu"
+                               name="gioiTinh" value="Nữ">Nữ
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Email(*)</td>
+                    <td>
+                        <input type="text" id="txtEmail">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <br>
+                        Sở thích của bạn:
+                        <br>
+
+                        <input type="checkbox"
+                               name="soThich" value="Mua sắm">Mua sắm
+                        <br>
+
+                        <input type="checkbox"
+                               name="soThich" value="Du lịch">Du lịch
+                        <br>
+
+                        <input type="checkbox"
+                               name="soThich" value="Tán gẫu">Tán gẫu
+                        <br>
+
+                        <input type="checkbox"
+                               name="soThich" value="Đọc sách">Đọc sách
+                        <br>
+
+                        <input type="checkbox"
+                               name="soThich" value="Nghe nhạc">Nghe nhạc
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        Màu yêu thích của bạn:
+                        <br>
+
+                        <input type="radio" name="mau"
+                               value="Màu xanh da trời" checked>
+                        <span style="background-color: blue;">
+                            Màu xanh da trời
+                        </span>
+                        <br>
+
+                        <input type="radio" name="mau" value="Màu đỏ">
+                        <span style="background-color: red;">
+                            Màu đỏ
+                        </span>
+                        <br>
+
+                        <input type="radio" name="mau" value="Màu vàng">
+                        <span style="background-color: yellow;">
+                            Màu vàng
+                        </span>
+                        <br>
+
+                        <input type="radio" name="mau"
+                               value="Màu xanh lá cây">
+                        <span style="background-color: green;">
+                            Màu xanh lá cây
+                        </span>
+                        <br>
+
+                        <input type="radio" name="mau" value="Màu tím">
+                        <span style="background-color: violet;">
+                            Màu tím
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <br>
+                        <input type="button" value="Đăng ký"
+                               onclick="dangKy()">
+
+                        <input type="button" value="Tiếp"
+                               onclick="tiep()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <table border="1" cellspacing="0" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Email</th>
+                    <th>Giới tính</th>
+                    <th>Ngày sinh</th>
+                    <th>Sở thích</th>
+                    <th>Màu yêu thích</th>
+                </tr>
+            </thead>
+
+            <tbody id="tbThanhVien">
+            </tbody>
+        </table>
+    </body>
+</html>
